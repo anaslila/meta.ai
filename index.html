@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta.ai Bank - Digital Banking</title>
+    <link rel="icon" href="https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=TT+Commons+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo-container">
+                    <img src="https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png" alt="Meta.ai Bank" class="logo">
+                </div>
+                <h2>Welcome Back</h2>
+                <p>Sign in to your Meta.ai Bank account</p>
+                
+                <form id="loginForm" class="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="loginId" placeholder="Login ID" class="curvy-input" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" placeholder="Password" class="curvy-input" required>
+                        <i class="fas fa-eye-slash toggle-password" onclick="togglePassword()"></i>
+                    </div>
+                    
+                    <button type="submit" class="curvy-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="login-footer">
+                    <p>Secure Banking with Advanced Encryption</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <div class="app-container">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <img src="https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png" alt="Meta.ai Bank" class="sidebar-logo">
+                    <h3>Meta.ai Bank</h3>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <a href="#" onclick="showPage('dashboard')" class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" onclick="showPage('transactions')" class="nav-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transactions</span>
+                    </a>
+                    <a href="#" onclick="showPage('profile')" class="nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" onclick="showPage('offers')" class="nav-item">
+                        <i class="fas fa-gift"></i>
+                        <span>Offers</span>
+                    </a>
+                    <a href="#" onclick="logout()" class="nav-item logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Header -->
+                <div class="header">
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <img src="https://via.placeholder.com/40" alt="Profile" class="profile-pic">
+                            <span id="userName">John Doe</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div id="dashboardContent" class="content-section active">
+                    <div class="welcome-section">
+                        <h1>Welcome to Meta.ai Bank</h1>
+                        <p>Your digital banking experience</p>
+                    </div>
+
+                    <!-- Balance Card -->
+                    <div class="balance-card">
+                        <div class="balance-header">
+                            <h3>Account Balance</h3>
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="balance-amount">
+                            <span class="currency">₹</span>
+                            <span id="accountBalance">50,000.00</span>
+                        </div>
+                        <div class="balance-info">
+                            <span>Available Balance</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <div class="action-card" onclick="showModal('sendMoney')">
+                            <div class="action-icon">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <h4>Send Money</h4>
+                            <p>Transfer funds instantly</p>
+                        </div>
+                        
+                        <div class="action-card" onclick="showModal('addMoney')">
+                            <div class="action-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h4>Add Money</h4>
+                            <p>Top up your account</p>
+                        </div>
+                        
+                        <div class="action-card" onclick="showModal('qrScanner')">
+                            <div class="action-icon">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <h4>QR Scanner</h4>
+                            <p>Scan & pay instantly</p>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Search -->
+                    <div class="search-section">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="transactionSearch" placeholder="Search transactions..." class="curvy-search">
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="transactions-section">
+                        <h3>Recent Transactions</h3>
+                        <div id="recentTransactions" class="transactions-list">
+                            <!-- Transactions will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Content -->
+                <div id="transactionsContent" class="content-section">
+                    <h2>All Transactions</h2>
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="allTransactionSearch" placeholder="Search all transactions..." class="curvy-search">
+                    </div>
+                    <div id="allTransactions" class="transactions-list">
+                        <!-- All transactions will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Profile Content -->
+                <div id="profileContent" class="content-section">
+                    <h2>Profile Information</h2>
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <img id="profilePhoto" src="https://via.placeholder.com/80" alt="Profile" class="profile-image">
+                            <div class="profile-info">
+                                <h3 id="profileName">John Doe</h3>
+                                <p id="profileEmail">Customer Since: <span id="accountCreated">Jan 2023</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Mobile Number:</span>
+                                <span id="profileMobile">+91 98765 43210</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Account Number:</span>
+                                <span id="profileAccount">****1234</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">IFSC Code:</span>
+                                <span id="profileIFSC">METAI001</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Branch:</span>
+                                <span id="profileBranch">Mumbai Central</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Account Type:</span>
+                                <span id="profileAccountType">Savings</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Debit Card:</span>
+                                <span id="profileDebitCard">****5678</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Credit Card:</span>
+                                <span id="profileCreditCard">****9012</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offers Content -->
+                <div id="offersContent" class="content-section">
+                    <h2>Exclusive Offers</h2>
+                    <div id="offersList" class="offers-container">
+                        <!-- Offers will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Send Money Modal -->
+    <div id="sendMoneyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send Money</h3>
+                <span class="close" onclick="closeModal('sendMoney')">&times;</span>
+            </div>
+            <form id="sendMoneyForm" class="modal-form">
+                <div class="input-group">
+                    <label>Transfer Type</label>
+                    <select id="transferType" class="curvy-input">
+                        <option value="upi">UPI Transfer</option>
+                        <option value="account">Account Transfer</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Recipient Details</label>
+                    <input type="text" id="recipient" placeholder="UPI ID or Account Number" class="curvy-input" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="sendAmount" placeholder="0.00" class="curvy-input" required min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label>Note (Optional)</label>
+                    <input type="text" id="sendNote" placeholder="Payment for..." class="curvy-input">
+                </div>
+                
+                <button type="submit" class="curvy-btn modal-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Money
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Money Modal -->
+    <div id="addMoneyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Money</h3>
+                <span class="close" onclick="closeModal('addMoney')">&times;</span>
+            </div>
+            <form id="addMoneyForm" class="modal-form">
+                <div class="input-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="addAmount" placeholder="0.00" class="curvy-input" required min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label>Payment Method</label>
+                    <select id="paymentMethod" class="curvy-input">
+                        <option value="debit">Debit Card</option>
+                        <option value="credit">Credit Card</option>
+                        <option value="netbanking">Net Banking</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="curvy-btn modal-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Money
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div id="qrScannerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>QR Code Scanner</h3>
+                <span class="close" onclick="closeModal('qrScanner')">&times;</span>
+            </div>
+            <div class="qr-scanner-content">
+                <div class="qr-upload-area">
+                    <i class="fas fa-qrcode qr-icon"></i>
+                    <p>Upload QR Code Image</p>
+                    <input type="file" id="qrUpload" accept="image/*" class="qr-input">
+                    <button type="button" onclick="document.getElementById('qrUpload').click()" class="curvy-btn upload-btn">
+                        <i class="fas fa-upload"></i>
+                        Choose Image
+                    </button>
+                </div>
+                <div id="qrResult" class="qr-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer" class="alert-container"></div>
+
+    <!-- Scripts -->
+    <script src="profile.js"></script>
+    <script src="alert.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
