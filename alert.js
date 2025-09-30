@@ -89,6 +89,21 @@ const bankOffers = [
         maxBenefit: 10000,
         usageCount: 0,
         maxUsage: 10
+    },
+    {
+        id: "OFFER007",
+        type: "PWA Install",
+        title: "Install App & Get ₹100",
+        description: "Install Meta.ai Bank app on your mobile device and get ₹100 cashback on your next transaction. Limited time offer!",
+        validity: "31st October 2024",
+        category: "app_promotion",
+        priority: "high",
+        targetCustomers: ["all"],
+        isActive: true,
+        termsAndConditions: "Valid only for new app installations. Cashback credited within 24 hours of first transaction.",
+        maxBenefit: 100,
+        usageCount: 0,
+        maxUsage: 1
     }
 ];
 
@@ -148,6 +163,17 @@ const systemNotifications = [
         isRead: true,
         actionRequired: false,
         category: "statement_ready"
+    },
+    {
+        id: "NOTIF006",
+        type: "promotional",
+        title: "Install Mobile App",
+        message: "Get the Meta.ai Bank mobile app for faster access and exclusive features. Install now from your browser menu!",
+        priority: "medium",
+        timestamp: new Date('2024-09-30T12:00:00'),
+        isRead: false,
+        actionRequired: false,
+        category: "app_promotion"
     }
 ];
 
@@ -537,6 +563,13 @@ function showBankAlerts() {
         );
     }, 1000);
 
+    // Show PWA installation prompt if applicable
+    setTimeout(() => {
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+            showPWAInstallAlert();
+        }
+    }, 5000);
+
     // Show promotional offers periodically
     setTimeout(() => {
         showRandomOffer();
@@ -548,8 +581,19 @@ function showBankAlerts() {
     }, 12000);
 }
 
+function showPWAInstallAlert() {
+    const installOffer = bankOffers.find(offer => offer.id === "OFFER007");
+    if (installOffer && installOffer.isActive) {
+        alertManager.info(
+            installOffer.description,
+            installOffer.title,
+            8000
+        );
+    }
+}
+
 function showRandomOffer() {
-    const activeOffers = bankOffers.filter(offer => offer.isActive);
+    const activeOffers = bankOffers.filter(offer => offer.isActive && offer.id !== "OFFER007");
     if (activeOffers.length === 0) return;
 
     const randomOffer = activeOffers[Math.floor(Math.random() * activeOffers.length)];
@@ -639,7 +683,8 @@ function showOfferAlert(offerId) {
         'Investment': 'info',
         'Credit Card': 'warning',
         'Insurance': 'info',
-        'Rewards': 'success'
+        'Rewards': 'success',
+        'PWA Install': 'info'
     };
 
     alertManager.createAlert(
@@ -670,6 +715,15 @@ function showMaintenanceAlert() {
     );
 }
 
+function showPWAInstalledAlert() {
+    alertManager.createAlert(
+        'success',
+        'Meta.ai Bank app has been installed successfully! You can now access it directly from your home screen.',
+        '📱 App Installed',
+        5000
+    );
+}
+
 // Utility functions
 function dismissAlert(alertId) {
     alertManager.removeAlert(alertId);
@@ -688,6 +742,7 @@ window.showSecurityAlert = showSecurityAlert;
 window.showOfferAlert = showOfferAlert;
 window.showLowBalanceAlert = showLowBalanceAlert;
 window.showMaintenanceAlert = showMaintenanceAlert;
+window.showPWAInstalledAlert = showPWAInstalledAlert;
 window.bankOffers = bankOffers;
 window.systemNotifications = systemNotifications;
 
@@ -708,5 +763,10 @@ setInterval(() => {
         }
     }
 }, 120000);
+
+// Listen for PWA installation events
+window.addEventListener('appinstalled', () => {
+    showPWAInstalledAlert();
+});
 
 console.log('Meta.ai Bank Alert System loaded successfully');

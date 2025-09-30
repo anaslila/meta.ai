@@ -1,6 +1,7 @@
 // Global Variables
 let currentUser = null;
 let currentBalance = 50000.00;
+let deferredPrompt;
 let transactionHistory = [
     {
         id: 'TXN001',
@@ -32,6 +33,58 @@ let transactionHistory = [
 ];
 let filteredTransactions = [...transactionHistory];
 
+// Bank Information Database
+const bankDatabase = {
+    'HDFC': {
+        name: 'HDFC Bank',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMDA0Qzk3Ii8+CjxwYXRoIGQ9Ik00IDZIMjBWMThINFY2WiIgZmlsbD0iIzAwNEM5NyIvPgo8cGF0aCBkPSJNNiA4VjE2SDEwVjEySDEzVjE2SDE4VjhIMTNWMTFIMTBWOEg2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+        ifscPrefix: 'HDFC',
+        color: '#004C97'
+    },
+    'ICICI': {
+        name: 'ICICI Bank',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRjM3MDIwIi8+CjxwYXRoIGQ9Ik02IDZIMThWMThINlY2WiIgZmlsbD0iI0YzNzAyMCIvPgo8cGF0aCBkPSJNOCA4VjE2SDEwVjhIOFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiA4VjEyTDE2IDhIMThaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4=',
+        ifscPrefix: 'ICIC',
+        color: '#F37020'
+    },
+    'SBI': {
+        name: 'State Bank of India',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMTM0RTVFIi8+CjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjgiIGZpbGw9IiMxMzRFNUUiLz4KPHBhdGggZD0iTTEyIDRMMTYgOEwxMiAxMkw4IDhMMTIgNFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxMkwxNiAxNkwxMiAyMEw4IDE2TDEyIDEyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+        ifscPrefix: 'SBIN',
+        color: '#134E5E'
+    },
+    'AXIS': {
+        name: 'Axis Bank',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjOTcxMzQ0Ii8+CjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIiBmaWxsPSIjOTcxMzQ0Ii8+CjxwYXRoIGQ9Ik04IDhIMTZWMTZIOFY4WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+        ifscPrefix: 'UTIB',
+        color: '#971344'
+    },
+    'KOTAK': {
+        name: 'Kotak Mahindra Bank',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRUQzMjM3Ii8+CjxwYXRoIGQ9Ik02IDZIMThWMThINlY2WiIgZmlsbD0iI0VEMzIzNyIvPgo8cGF0aCBkPSJNOCA4SDE2VjEwSDEwVjE0SDE2VjE2SDhWOFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPg==',
+        ifscPrefix: 'KKBK',
+        color: '#ED3237'
+    },
+    'BOB': {
+        name: 'Bank of Baroda',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRkY5OTAwIi8+CjxwYXRoIGQ9Ik02IDZIMThWMThINlY2WiIgZmlsbD0iI0ZGOTkwMCIvPgo8cGF0aCBkPSJNOCA4VjE2SDEwVjEzSDEzVjE2SDE2VjhIMTNWMTFIMTBWOEg4WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+        ifscPrefix: 'BARB',
+        color: '#FF9900'
+    },
+    'PNB': {
+        name: 'Punjab National Bank',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMDA2NkNDIi8+CjxwYXRoIGQ9Ik02IDZIMThWMThINlY2WiIgZmlsbD0iIzAwNjZDQyIvPgo8cGF0aCBkPSJNOCA4VjE2SDEwVjEzSDEzVjE2SDE2VjhIMTNWMTFIMTBWOEg4WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+        ifscPrefix: 'PUNB',
+        color: '#0066CC'
+    },
+    'CANARA': {
+        name: 'Canara Bank',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjRkY2NjMzIi8+CjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjgiIGZpbGw9IiNGRjY2MzMiLz4KPHBhdGggZD0iTTEwIDEwSDE0VjE0SDEwVjEwWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+',
+        ifscPrefix: 'CNRB',
+        color: '#FF6633'
+    }
+};
+
 // DOM Elements
 let loginPage, dashboardPage, sidebar, mainContent;
 let loginForm, sendMoneyForm, addMoneyForm, qrUpload;
@@ -43,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeElements();
     initializeEventListeners();
     loadUserProfile();
+    initializePWA();
     showAlerts();
     
     // Show login page by default
@@ -116,6 +170,33 @@ function initializeEventListeners() {
     });
 }
 
+// PWA Initialization
+function initializePWA() {
+    // Listen for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('PWA install prompt triggered');
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallPrompt();
+    });
+    
+    // Listen for appinstalled event
+    window.addEventListener('appinstalled', (evt) => {
+        console.log('PWA was installed');
+        dismissInstallPrompt();
+        showAlert('success', 'App installed successfully! You can now access Meta.ai Bank from your home screen.');
+    });
+    
+    // Check if app is in standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        console.log('App running in standalone mode');
+        document.body.classList.add('standalone-mode');
+    }
+    
+    // Update install button visibility
+    updateInstallButtonVisibility();
+}
+
 // Authentication Functions
 function handleLogin(event) {
     event.preventDefault();
@@ -129,6 +210,13 @@ function handleLogin(event) {
         showDashboard();
         updateUserInterface();
         showAlert('success', 'Login successful! Welcome to Meta.ai Bank');
+        
+        // Show install prompt after successful login (if available)
+        setTimeout(() => {
+            if (deferredPrompt) {
+                showInstallPrompt();
+            }
+        }, 3000);
     } else {
         showAlert('error', 'Invalid User Login. Please check your credentials.');
     }
@@ -175,7 +263,7 @@ function showPage(pageName) {
     contentSections.forEach(section => section.classList.remove('active'));
     
     // Add active class to current nav item and content section
-    const activeNavItem = document.querySelector(`[onclick="showPage('${pageName}')"]`);
+    const activeNavItem = document.querySelector(`[onclick*="showPage('${pageName}')"]`);
     const activeContentSection = document.getElementById(`${pageName}Content`);
     
     if (activeNavItem) {
@@ -199,6 +287,9 @@ function showPage(pageName) {
             break;
         case 'offers':
             updateOffers();
+            break;
+        case 'install':
+            updateInstallPage();
             break;
     }
 }
@@ -340,9 +431,9 @@ function handleSendMoney(event) {
     updateRecentTransactions();
     updateAllTransactions();
     
-    // Close modal and show success
+    // Close modal and show payment success
     closeModal('sendMoney');
-    showAlert('success', `₹${formatAmount(amount)} sent successfully to ${recipient}`);
+    showPaymentSuccess(transaction, transferType);
     
     // Reset form
     sendMoneyForm.reset();
@@ -383,9 +474,9 @@ function handleAddMoney(event) {
         updateRecentTransactions();
         updateAllTransactions();
         
-        // Close modal and show success
+        // Close modal and show payment success
         closeModal('addMoney');
-        showAlert('success', `₹${formatAmount(amount)} added successfully to your account`);
+        showPaymentSuccess(transaction, paymentMethod);
         
         // Reset form
         addMoneyForm.reset();
@@ -411,6 +502,118 @@ function simulatePaymentProcessing(callback) {
     }
 }
 
+// Payment Success Functions
+function showPaymentSuccess(transaction, paymentMethod) {
+    const modal = document.getElementById('paymentSuccessModal');
+    if (!modal) return;
+    
+    // Update transaction details
+    document.getElementById('successTransactionId').textContent = transaction.id;
+    document.getElementById('successAmount').textContent = `₹${formatAmount(transaction.amount)}`;
+    document.getElementById('successRecipient').textContent = transaction.recipient;
+    document.getElementById('successPaymentMethod').textContent = getPaymentMethodText(paymentMethod, transaction.type);
+    document.getElementById('successDateTime').textContent = formatDate(transaction.date);
+    
+    // Show bank information if it's a bank transfer
+    const bankInfo = getBankInfoFromRecipient(transaction.recipient);
+    if (bankInfo) {
+        const bankInfoElement = document.getElementById('successBankInfo');
+        const bankLogo = document.getElementById('successBankLogo');
+        const bankName = document.getElementById('successBankName');
+        
+        bankLogo.src = bankInfo.logo;
+        bankName.textContent = bankInfo.name;
+        bankInfoElement.style.display = 'flex';
+    } else {
+        document.getElementById('successBankInfo').style.display = 'none';
+    }
+    
+    // Show modal
+    modal.style.display = 'block';
+    
+    // Auto-close after 10 seconds
+    setTimeout(() => {
+        closePaymentSuccess();
+    }, 10000);
+}
+
+function getBankInfoFromRecipient(recipient) {
+    // Check if recipient contains bank information
+    for (const [key, bank] of Object.entries(bankDatabase)) {
+        if (recipient.toLowerCase().includes(bank.name.toLowerCase()) || 
+            recipient.toLowerCase().includes(key.toLowerCase())) {
+            return bank;
+        }
+    }
+    
+    // Random bank for demo purposes if no match found
+    const randomBanks = ['HDFC', 'ICICI', 'SBI', 'AXIS'];
+    const randomBank = randomBanks[Math.floor(Math.random() * randomBanks.length)];
+    return bankDatabase[randomBank];
+}
+
+function getPaymentMethodText(method, transactionType) {
+    if (transactionType === 'added') {
+        const methodMap = {
+            'debit': 'Debit Card',
+            'credit': 'Credit Card',
+            'netbanking': 'Net Banking'
+        };
+        return methodMap[method] || 'Meta.ai Bank Account';
+    } else {
+        const methodMap = {
+            'upi': 'UPI Transfer',
+            'account': 'Account Transfer'
+        };
+        return methodMap[method] || 'Meta.ai Bank Account';
+    }
+}
+
+function closePaymentSuccess() {
+    const modal = document.getElementById('paymentSuccessModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function downloadReceipt() {
+    // Simulate receipt download
+    showAlert('success', 'Receipt downloaded successfully!');
+    
+    // In a real app, this would generate and download a PDF receipt
+    const receiptData = {
+        transactionId: document.getElementById('successTransactionId').textContent,
+        amount: document.getElementById('successAmount').textContent,
+        recipient: document.getElementById('successRecipient').textContent,
+        dateTime: document.getElementById('successDateTime').textContent
+    };
+    
+    console.log('Receipt data:', receiptData);
+}
+
+function shareTransaction() {
+    const transactionData = {
+        title: 'Meta.ai Bank Transaction',
+        text: `Payment of ${document.getElementById('successAmount').textContent} to ${document.getElementById('successRecipient').textContent} completed successfully.`,
+        url: window.location.href
+    };
+    
+    if (navigator.share) {
+        navigator.share(transactionData)
+            .then(() => console.log('Transaction shared successfully'))
+            .catch((error) => console.log('Error sharing transaction:', error));
+    } else {
+        // Fallback for browsers that don't support Web Share API
+        const textArea = document.createElement('textarea');
+        textArea.value = `${transactionData.text}\n\nTransaction ID: ${document.getElementById('successTransactionId').textContent}`;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showAlert('success', 'Transaction details copied to clipboard!');
+    }
+}
+
 // QR Scanner Functions
 function handleQRUpload(event) {
     const file = event.target.files[0];
@@ -423,12 +626,19 @@ function handleQRUpload(event) {
         if (qrResult) {
             qrResult.style.display = 'block';
             if (result.success) {
+                const bankInfo = getBankInfoFromRecipient(result.merchant);
                 qrResult.innerHTML = `
                     <div class="qr-success">
                         <i class="fas fa-check-circle success"></i>
                         <h4>QR Code Detected</h4>
-                        <p><strong>Merchant:</strong> ${result.merchant}</p>
-                        <p><strong>Amount:</strong> ₹${result.amount}</p>
+                        <div class="qr-merchant-info">
+                            ${bankInfo ? `<img src="${bankInfo.logo}" alt="${bankInfo.name}" class="bank-logo">` : ''}
+                            <div>
+                                <p><strong>Merchant:</strong> ${result.merchant}</p>
+                                <p><strong>Amount:</strong> ₹${result.amount}</p>
+                                ${bankInfo ? `<p><strong>Bank:</strong> ${bankInfo.name}</p>` : ''}
+                            </div>
+                        </div>
                         <button class="curvy-btn" onclick="processQRPayment('${result.merchant}', ${result.amount})">
                             <i class="fas fa-credit-card"></i>
                             Pay Now
@@ -455,7 +665,7 @@ function simulateQRScan(file, callback) {
         const isValid = Math.random() > 0.3;
         
         if (isValid) {
-            const merchants = ['Coffee Shop', 'Grocery Store', 'Restaurant ABC', 'Gas Station', 'BookStore'];
+            const merchants = ['Coffee Shop', 'HDFC Merchant', 'ICICI Store', 'SBI Retailer', 'Axis Mart'];
             const amounts = [250, 450, 1200, 800, 350];
             
             const randomIndex = Math.floor(Math.random() * merchants.length);
@@ -498,9 +708,9 @@ function processQRPayment(merchant, amount) {
     updateRecentTransactions();
     updateAllTransactions();
     
-    // Close modal and show success
+    // Close modal and show payment success
     closeModal('qrScanner');
-    showAlert('success', `₹${formatAmount(amount)} paid successfully to ${merchant}`);
+    showPaymentSuccess(transaction, 'qr');
 }
 
 // Search Functions
@@ -609,6 +819,61 @@ function updateOffers() {
     `).join('');
 }
 
+// Install App Functions
+function updateInstallPage() {
+    updateInstallButtonVisibility();
+}
+
+function updateInstallButtonVisibility() {
+    const installBtn = document.getElementById('installAppBtn');
+    const instructions = document.getElementById('installInstructions');
+    
+    if (deferredPrompt) {
+        if (installBtn) installBtn.style.display = 'block';
+        if (instructions) instructions.style.display = 'none';
+    } else {
+        if (installBtn) installBtn.style.display = 'none';
+        if (instructions) instructions.style.display = 'block';
+    }
+}
+
+function showInstallPrompt() {
+    const installPrompt = document.getElementById('installPrompt');
+    if (installPrompt && deferredPrompt) {
+        installPrompt.style.display = 'block';
+    }
+}
+
+function dismissInstallPrompt() {
+    const installPrompt = document.getElementById('installPrompt');
+    if (installPrompt) {
+        installPrompt.style.display = 'none';
+    }
+}
+
+function installApp() {
+    if (!deferredPrompt) {
+        showAlert('info', 'Installation not available. Please use your browser menu to add to home screen.');
+        return;
+    }
+    
+    // Show the install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+            showAlert('success', 'App is being installed...');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+        deferredPrompt = null;
+        dismissInstallPrompt();
+        updateInstallButtonVisibility();
+    });
+}
+
 // Modal Functions
 function showModal(modalName) {
     const modal = document.getElementById(`${modalName}Modal`);
@@ -709,7 +974,7 @@ function handleResize() {
 // Initialize responsive behavior
 window.addEventListener('resize', handleResize);
 
-// Export functions for global access (if needed)
+// Export functions for global access
 window.showPage = showPage;
 window.logout = logout;
 window.showModal = showModal;
@@ -717,6 +982,11 @@ window.closeModal = closeModal;
 window.togglePassword = togglePassword;
 window.toggleSidebar = toggleSidebar;
 window.processQRPayment = processQRPayment;
+window.closePaymentSuccess = closePaymentSuccess;
+window.downloadReceipt = downloadReceipt;
+window.shareTransaction = shareTransaction;
+window.installApp = installApp;
+window.dismissInstallPrompt = dismissInstallPrompt;
 
 // Initialize app when DOM is loaded
 if (document.readyState === 'loading') {

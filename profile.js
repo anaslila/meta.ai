@@ -4,7 +4,7 @@
 const userProfile = {
     // Authentication Details
     loginId: "anaslila",
-    password: "MdAnasLila@989230",
+    password: "anaslila",
     
     // Personal Information
     accountHolderName: "Anas Hanif Lila",

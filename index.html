@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meta.ai Bank - Digital Banking</title>
     <link rel="icon" href="https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#580eeb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Meta.ai Bank">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=TT+Commons+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -71,6 +77,10 @@
                     <a href="#" onclick="showPage('offers')" class="nav-item">
                         <i class="fas fa-gift"></i>
                         <span>Offers</span>
+                    </a>
+                    <a href="#" onclick="showPage('install')" class="nav-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Install App</span>
                     </a>
                     <a href="#" onclick="logout()" class="nav-item logout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -224,6 +234,64 @@
                         <!-- Offers will be populated by JavaScript -->
                     </div>
                 </div>
+
+                <!-- Install App Content -->
+                <div id="installContent" class="content-section">
+                    <div class="install-section">
+                        <div class="install-header">
+                            <img src="https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png" alt="Meta.ai Bank" class="install-app-logo">
+                            <h2>Install Meta.ai Bank</h2>
+                            <p>Get the full app experience on your device</p>
+                        </div>
+                        
+                        <div class="install-features">
+                            <div class="feature-item">
+                                <i class="fas fa-bolt"></i>
+                                <h4>Lightning Fast</h4>
+                                <p>Instant access without browser overhead</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-wifi"></i>
+                                <h4>Works Offline</h4>
+                                <p>Access your data even without internet</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-bell"></i>
+                                <h4>Push Notifications</h4>
+                                <p>Get instant alerts for transactions</p>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <h4>Enhanced Security</h4>
+                                <p>Biometric authentication support</p>
+                            </div>
+                        </div>
+                        
+                        <div class="install-actions-section">
+                            <button id="installAppBtn" class="curvy-btn install-main-btn" onclick="installApp()" style="display: none;">
+                                <i class="fas fa-download"></i>
+                                Install App
+                            </button>
+                            <div id="installInstructions" class="install-instructions">
+                                <h4>How to Install:</h4>
+                                <div class="instruction-steps">
+                                    <div class="step">
+                                        <span class="step-number">1</span>
+                                        <p>Tap the menu button (⋮) in your browser</p>
+                                    </div>
+                                    <div class="step">
+                                        <span class="step-number">2</span>
+                                        <p>Select "Add to Home screen" or "Install app"</p>
+                                    </div>
+                                    <div class="step">
+                                        <span class="step-number">3</span>
+                                        <p>Confirm installation when prompted</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -320,6 +388,86 @@
         </div>
     </div>
 
+    <!-- Payment Success Modal -->
+    <div id="paymentSuccessModal" class="modal">
+        <div class="modal-content payment-success-content">
+            <div class="success-animation">
+                <div class="checkmark-container">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark-check" fill="none" d="m14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="success-content">
+                <h2 class="success-title">Payment Successful!</h2>
+                <p class="success-subtitle">Your transaction has been completed successfully</p>
+                
+                <div class="transaction-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Transaction ID:</span>
+                        <span id="successTransactionId" class="detail-value">TXN123456789</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Amount Paid:</span>
+                        <span id="successAmount" class="detail-value success-amount">₹1,000.00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Paid To:</span>
+                        <span id="successRecipient" class="detail-value">John Doe</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Payment Method:</span>
+                        <span id="successPaymentMethod" class="detail-value">Meta.ai Bank Account</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Date & Time:</span>
+                        <span id="successDateTime" class="detail-value">30 Sep 2024, 5:15 PM</span>
+                    </div>
+                    <div class="detail-item" id="successBankInfo" style="display: none;">
+                        <span class="detail-label">Recipient Bank:</span>
+                        <div class="bank-info">
+                            <img id="successBankLogo" src="" alt="Bank Logo" class="bank-logo">
+                            <span id="successBankName" class="bank-name">HDFC Bank</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="success-actions">
+                    <button class="curvy-btn success-btn" onclick="downloadReceipt()">
+                        <i class="fas fa-download"></i>
+                        Download Receipt
+                    </button>
+                    <button class="curvy-btn outline-btn" onclick="shareTransaction()">
+                        <i class="fas fa-share"></i>
+                        Share
+                    </button>
+                    <button class="curvy-btn close-btn" onclick="closePaymentSuccess()">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install App Prompt -->
+    <div id="installPrompt" class="install-prompt" style="display: none;">
+        <div class="install-content">
+            <div class="install-icon">
+                <img src="https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png" alt="Meta.ai Bank" class="install-logo">
+            </div>
+            <div class="install-text">
+                <h4>Install Meta.ai Bank</h4>
+                <p>Add to home screen for quick access</p>
+            </div>
+            <div class="install-actions">
+                <button class="install-btn" onclick="installApp()">Install</button>
+                <button class="install-close" onclick="dismissInstallPrompt()">×</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Alert Container -->
     <div id="alertContainer" class="alert-container"></div>
 
@@ -327,5 +475,20 @@
     <script src="profile.js"></script>
     <script src="alert.js"></script>
     <script src="script.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

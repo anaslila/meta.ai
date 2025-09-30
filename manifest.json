@@ -1,0 +1,117 @@
+{
+    "name": "Meta.ai Bank - Digital Banking",
+    "short_name": "Meta.ai Bank",
+    "description": "Your complete digital banking solution with advanced AI features",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#580eeb",
+    "theme_color": "#580eeb",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "en-US",
+    "categories": ["finance", "business", "productivity"],
+    "icons": [
+        {
+            "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+            "sizes": "48x48",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "https://i.postimg.cc/Vsgq0JnJ/Meta-ai-Bank.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Send Money",
+            "short_name": "Send",
+            "description": "Quick money transfer",
+            "url": "/?action=send",
+            "icons": [
+                {
+                    "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Check Balance",
+            "short_name": "Balance",
+            "description": "View account balance",
+            "url": "/?action=balance",
+            "icons": [
+                {
+                    "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Transactions",
+            "short_name": "History",
+            "description": "View transaction history",
+            "url": "/?action=transactions",
+            "icons": [
+                {
+                    "src": "https://i.postimg.cc/fThYPxZ4/Meta-ai-Bank-1.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "https://via.placeholder.com/540x720/580eeb/ffffff?text=Meta.ai+Bank+Dashboard",
+            "sizes": "540x720",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "https://via.placeholder.com/1024x593/580eeb/ffffff?text=Meta.ai+Bank+Desktop",
+            "sizes": "1024x593",
+            "type": "image/png",
+            "form_factor": "wide"
+        }
+    ],
+    "display_override": ["window-controls-overlay", "standalone"],
+    "launch_handler": {
+        "client_mode": "focus-existing"
+    },
+    "edge_side_panel": {
+        "preferred_width": 350
+    },
+    "prefer_related_applications": false,
+    "protocol_handlers": [
+        {
+            "protocol": "upi",
+            "url": "/?pay=%s"
+        }
+    ]
+}
