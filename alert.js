@@ -15,6 +15,96 @@ const bankOffers = [
         usageCount: 0,
         maxUsage: 50
     },
+    {
+        id: "OFFER002",
+        type: "Loan",
+        title: "Personal Loan at 9.99%",
+        description: "Get instant personal loan up to ₹10 lakhs at attractive interest rates starting from 9.99% per annum. Quick approval in 2 hours.",
+        validity: "15th November 2024",
+        category: "lending",
+        priority: "medium",
+        targetCustomers: ["premium", "salary"],
+        isActive: true,
+        termsAndConditions: "Subject to credit approval. Processing fee applicable.",
+        maxBenefit: 1000000,
+        usageCount: 0,
+        maxUsage: 1
+    },
+    {
+        id: "OFFER003",
+        type: "Investment",
+        title: "Fixed Deposit Special Rate",
+        description: "Earn up to 7.5% per annum on Fixed Deposits for tenure of 2 years and above. Senior citizens get additional 0.25% interest.",
+        validity: "30th October 2024",
+        category: "investment",
+        priority: "medium",
+        targetCustomers: ["all"],
+        isActive: true,
+        termsAndConditions: "Minimum deposit amount ₹25,000. Premature withdrawal penalties apply.",
+        maxBenefit: null,
+        usageCount: 0,
+        maxUsage: null
+    },
+    {
+        id: "OFFER004",
+        type: "Credit Card",
+        title: "Zero Annual Fee Credit Card",
+        description: "Apply for Meta.ai Platinum Credit Card with zero annual fee for lifetime. Enjoy 5X reward points on dining and fuel.",
+        validity: "31st January 2025",
+        category: "cards",
+        priority: "high",
+        targetCustomers: ["savings", "premium"],
+        isActive: true,
+        termsAndConditions: "Annual income criteria applies. Subject to credit bureau checks.",
+        maxBenefit: null,
+        usageCount: 0,
+        maxUsage: 1
+    },
+    {
+        id: "OFFER005",
+        type: "Insurance",
+        title: "Health Insurance Premium Discount",
+        description: "Get 25% discount on health insurance premium when you pay through Meta.ai Bank. Family floater plans starting ₹5,000 annually.",
+        validity: "31st March 2025",
+        category: "insurance",
+        priority: "low",
+        targetCustomers: ["all"],
+        isActive: true,
+        termsAndConditions: "Discount applicable on first-year premium only. Age restrictions apply.",
+        maxBenefit: 15000,
+        usageCount: 0,
+        maxUsage: 1
+    },
+    {
+        id: "OFFER006",
+        type: "Rewards",
+        title: "Refer & Earn Program",
+        description: "Refer friends to open Meta.ai Bank account and earn ₹1,000 for each successful referral. Your friend also gets ₹500 welcome bonus.",
+        validity: "31st December 2024",
+        category: "referral",
+        priority: "medium",
+        targetCustomers: ["all"],
+        isActive: true,
+        termsAndConditions: "Referee must maintain minimum balance for 3 months. Maximum 10 referrals per customer.",
+        maxBenefit: 10000,
+        usageCount: 0,
+        maxUsage: 10
+    },
+    {
+        id: "OFFER007",
+        type: "PWA Install",
+        title: "Install App & Get ₹100",
+        description: "Install Meta.ai Bank app on your mobile device and get ₹100 cashback on your next transaction. Limited time offer!",
+        validity: "31st October 2024",
+        category: "app_promotion",
+        priority: "high",
+        targetCustomers: ["all"],
+        isActive: true,
+        termsAndConditions: "Valid only for new app installations. Cashback credited within 24 hours of first transaction.",
+        maxBenefit: 100,
+        usageCount: 0,
+        maxUsage: 1
+    }
 ];
 
 // System Notifications Data
@@ -24,12 +114,67 @@ const systemNotifications = [
         type: "security",
         title: "Security Alert",
         message: "Your account was accessed from a new device on Sep 30, 2024. If this wasn't you, please contact us immediately.",
-        priority: "low",
+        priority: "high",
         timestamp: new Date('2024-09-30T16:15:00'),
         isRead: false,
         actionRequired: true,
         category: "security_alert"
     },
+    {
+        id: "NOTIF002",
+        type: "transaction",
+        title: "Large Transaction Alert",
+        message: "A transaction of ₹25,000 was debited from your account today. Your current balance is ₹50,000.",
+        priority: "medium",
+        timestamp: new Date('2024-09-30T14:30:00'),
+        isRead: false,
+        actionRequired: false,
+        category: "transaction_alert"
+    },
+    {
+        id: "NOTIF003",
+        type: "promotional",
+        title: "New Feature Available",
+        message: "Experience our new QR code payment feature! Scan and pay instantly at merchant locations.",
+        priority: "low",
+        timestamp: new Date('2024-09-30T09:00:00'),
+        isRead: true,
+        actionRequired: false,
+        category: "feature_update"
+    },
+    {
+        id: "NOTIF004",
+        type: "reminder",
+        title: "EMI Due Reminder",
+        message: "Your personal loan EMI of ₹8,547 is due on October 5, 2024. Ensure sufficient balance to avoid penalties.",
+        priority: "high",
+        timestamp: new Date('2024-09-29T10:00:00'),
+        isRead: false,
+        actionRequired: true,
+        category: "payment_reminder"
+    },
+    {
+        id: "NOTIF005",
+        type: "info",
+        title: "Account Statement Ready",
+        message: "Your monthly account statement for September 2024 is now available for download in your profile section.",
+        priority: "low",
+        timestamp: new Date('2024-09-28T18:00:00'),
+        isRead: true,
+        actionRequired: false,
+        category: "statement_ready"
+    },
+    {
+        id: "NOTIF006",
+        type: "promotional",
+        title: "Install Mobile App",
+        message: "Get the Meta.ai Bank mobile app for faster access and exclusive features. Install now from your browser menu!",
+        priority: "medium",
+        timestamp: new Date('2024-09-30T12:00:00'),
+        isRead: false,
+        actionRequired: false,
+        category: "app_promotion"
+    }
 ];
 
 // Alert Management System
@@ -625,4 +770,3 @@ window.addEventListener('appinstalled', () => {
 });
 
 console.log('Meta.ai Bank Alert System loaded successfully');
-
