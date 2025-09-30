@@ -7,7 +7,7 @@ let transactionHistory = [
         id: 'TXN001',
         type: 'received',
         amount: 5000,
-        description: 'Salary Credit',
+        description: 'Reiumbursement',
         recipient: 'Company ABC',
         date: new Date('2024-09-25T10:30:00'),
         note: 'Monthly salary'
@@ -24,8 +24,8 @@ let transactionHistory = [
     {
         id: 'TXN003',
         type: 'added',
-        amount: 10000,
-        description: 'Account Top-up',
+        amount: 50000,
+        description: 'Salary APCPL',
         recipient: 'Self',
         date: new Date('2024-09-29T09:20:00'),
         note: 'Added via debit card'
@@ -996,3 +996,4 @@ if (document.readyState === 'loading') {
 } else {
     console.log('Meta.ai Bank Application Initialized');
 }
+
